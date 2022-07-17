@@ -1,4 +1,4 @@
-import styled, { css } from "styled-components";
+import styled from 'styled-components';
 
 export const ShareBar = styled.div`
   display: flex;
@@ -15,7 +15,7 @@ export const Button = styled.button`
   flex: 1;
   margin: 0 0.5rem;
   height: var(--row-height);
-  background: ${props => (props.red ? "var(--red)" : "var(--white-bg-hover2)")};
+  background: ${props => (props.red ? 'var(--red)' : 'var(--white-bg-hover2)')};
   font-size: 1rem;
   font-weight: 800;
   text-transform: uppercase;
@@ -32,7 +32,7 @@ export const Button = styled.button`
   }
   &:hover {
     background: ${props =>
-      props.red ? "var(--red-hover)" : "var(--white-active)"};
+      props.red ? 'var(--red-hover)' : 'var(--white-active)'};
     .dots1 {
       &::before {
         top: 6px;
@@ -62,7 +62,7 @@ export const Button = styled.button`
   .dots {
     &::before,
     &::after {
-      content: "";
+      content: '';
       height: 2px;
       width: 2px;
       background: var(--white);

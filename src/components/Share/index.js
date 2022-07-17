@@ -1,13 +1,11 @@
-import React, { useState, useRef, useCallback } from "react";
-import qs from "qs";
-import store from "store";
+import React, { useState, useRef, useCallback } from 'react';
+import qs from 'qs';
+import store from 'store';
 
-import { ShareBar, SettingsText, Button, Saved, SavedItem } from "./styled";
-
-const prefix = "https://8nkns.csb.app/?";
+import { ShareBar, SettingsText, Button, Saved, SavedItem } from './styled';
 
 const Share = ({ settings, setSettings }) => {
-  const savedSettings = store.get("settings") || [];
+  const savedSettings = store.get('settings') || [];
   const [copied, setCopied] = useState(false);
   const [savedCrosshairs, setSavedCrosshairs] = useState(savedSettings);
   const textAreaRef = useRef(null);
@@ -15,7 +13,7 @@ const Share = ({ settings, setSettings }) => {
 
   const handleCopy = useCallback(() => {
     textAreaRef.current.select();
-    document.execCommand("copy");
+    document.execCommand('copy');
     setCopied(true);
 
     let timer1 = setTimeout(() => {
@@ -27,13 +25,17 @@ const Share = ({ settings, setSettings }) => {
     };
   }, []);
 
+  const prefix = window?.location
+    ? window.location.href
+    : 'https://xhair.vercel.app/';
+
   const handleSave = useCallback(() => {
     const savedLength = savedCrosshairs.length || 0;
     const settingsToSave = { ...settings };
-    if (settingsToSave.title === "default") {
+    if (settingsToSave.title === 'default') {
       settingsToSave.title = `default ${savedLength + 1}`;
     }
-    store.set("settings", [...savedSettings, settingsToSave]);
+    store.set('settings', [...savedSettings, settingsToSave]);
     setSavedCrosshairs(prev => [...prev, settingsToSave]);
   }, [savedCrosshairs]);
 
@@ -45,10 +47,10 @@ const Share = ({ settings, setSettings }) => {
   return (
     <>
       <ShareBar>
-        <Button red className={copied && "copied"} onClick={handleCopy}>
-          {copied ? "Copied!" : "Share"}
-          <div className="dots dots1" />
-          <div className="dots dots2" />
+        <Button red className={copied && 'copied'} onClick={handleCopy}>
+          {copied ? 'Copied!' : 'Share'}
+          <div className='dots dots1' />
+          <div className='dots dots2' />
         </Button>
         {/* <Button onClick={handleSave}>
           <span>Save</span>
@@ -78,7 +80,7 @@ const Share = ({ settings, setSettings }) => {
       )} */}
       <SettingsText
         ref={textAreaRef}
-        value={`${prefix}${queryString}`}
+        value={`${prefix}?${queryString}`}
         readOnly
       />
     </>
