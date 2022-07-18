@@ -1,20 +1,24 @@
-import React, { useState, useRef, useCallback } from 'react';
-import qs from 'qs';
+import React, { useState, useCallback, memo } from 'react';
 import store from 'store';
 
-import { ShareBar, SettingsText, Button, Saved, SavedItem } from './styled';
+import { ShareBar, Button, Saved, SavedItem } from './styled';
 
 const Share = ({ settings, setSettings }) => {
   const savedSettings = store.get('settings') || [];
   const [copied, setCopied] = useState(false);
   const [savedCrosshairs, setSavedCrosshairs] = useState(savedSettings);
-  const textAreaRef = useRef(null);
-  const queryString = qs.stringify(settings);
 
   const handleCopy = useCallback(() => {
-    textAreaRef.current.select();
-    document.execCommand('copy');
-    setCopied(true);
+    if (!navigator) return;
+
+    const prefix = window?.location
+      ? window.location.href
+      : 'https://xhair.vercel.app/';
+    const queryString = new URLSearchParams(settings).toString();
+
+    const value = `${prefix}?${queryString}`;
+
+    navigator.clipboard.writeText(value).then(() => setCopied(true));
 
     let timer1 = setTimeout(() => {
       setCopied(false);
@@ -23,11 +27,7 @@ const Share = ({ settings, setSettings }) => {
     return () => {
       clearTimeout(timer1);
     };
-  }, []);
-
-  const prefix = window?.location
-    ? window.location.href
-    : 'https://xhair.vercel.app/';
+  }, [navigator, window, settings]);
 
   const handleSave = useCallback(() => {
     const savedLength = savedCrosshairs.length || 0;
@@ -78,13 +78,8 @@ const Share = ({ settings, setSettings }) => {
       ) : (
         "No saved Crosshairs"
       )} */}
-      <SettingsText
-        ref={textAreaRef}
-        value={`${prefix}?${queryString}`}
-        readOnly
-      />
     </>
   );
 };
 
-export default Share;
+export default memo(Share);

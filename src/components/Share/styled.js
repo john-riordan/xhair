@@ -4,11 +4,6 @@ export const ShareBar = styled.div`
   display: flex;
   margin: 0 -0.5rem;
 `;
-export const SettingsText = styled.textarea`
-  opacity: 0;
-  height: 0;
-  width: 0;
-`;
 export const Button = styled.button`
   position: relative;
   display: block;

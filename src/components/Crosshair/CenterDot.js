@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import { boolean_map } from "../../constants";
-import { calcDotShape, calcDotPosition } from "./utils";
+import { boolean_map } from '../../constants';
+import { calcDotShape, calcDotPosition } from './utils';
 
 const CenterDot = ({ settings }) => {
   const shape = calcDotShape(settings);
@@ -9,10 +9,11 @@ const CenterDot = ({ settings }) => {
   const dotOpacity = settings.outline_opacity;
   const dotStyle = boolean_map[settings.outlines]
     ? {
-        stroke: "black",
+        stroke: 'black',
         strokeWidth: settings.outline_thickness * 2,
         strokeOpacity: settings.outline_opacity,
-        paintOrder: "stroke"
+        fillOpacity: settings.center_dot_opacity,
+        paintOrder: 'stroke',
       }
     : null;
 
