@@ -1,5 +1,4 @@
 import React, { useState, useCallback, useMemo } from 'react';
-import qs from 'qs';
 
 import { boolean_map, colors, defaultSettings } from '../../constants';
 import Environment from '../../components/Environment';
@@ -10,28 +9,20 @@ import Setting from '../../components/Setting';
 import Toggle from '../../components/Toggle';
 import Range from '../../components/Range';
 
-// TODO: Convery query string booleans and numbers
-
 const Settings = ({ location }) => {
-  const query = new URLSearchParams(location.search).toString();
   const querySettings = useMemo(() => {
-    const parsed = qs.parse(query.length ? query : defaultSettings);
+    const query = new URLSearchParams(location.search);
 
-    console.log('parsed before', parsed);
+    let result = defaultSettings;
 
-    for (const key in parsed) {
-      const val = parsed[key];
+    if (!query?.toString().length) return defaultSettings;
 
-      if (val === 'true' || val === 'false') {
-        console.log(key);
-        parsed[key] = Boolean(val);
-      }
+    for (const [key, val] of query) {
+      result[key] = val;
     }
 
-    console.log('parsed after', parsed);
-
-    return parsed;
-  }, [query]);
+    return defaultSettings;
+  }, [location.search]);
 
   const [settings, setSettings] = useState(querySettings);
 
@@ -176,11 +167,7 @@ const Settings = ({ location }) => {
           <Environment>
             <Crosshair settings={settings} className='crosshair' />
           </Environment>
-          <Share
-            settings={settings}
-            setSettings={setSettings}
-            querySettings={querySettings}
-          />
+          <Share settings={settings} setSettings={setSettings} />
         </div>
         <div className='frame-settings'>
           <div>
@@ -209,7 +196,7 @@ const Settings = ({ location }) => {
               />
               <Setting
                 label='Outline Opacity'
-                disabled={!settings.outlines}
+                disabled={!boolean_map[settings.outlines]}
                 input={
                   <Range
                     name='outline opacity'
@@ -223,7 +210,7 @@ const Settings = ({ location }) => {
               />
               <Setting
                 label='Outline Thickness'
-                disabled={!settings.outlines}
+                disabled={!boolean_map[settings.outlines]}
                 input={
                   <Range
                     name='outline thickness'
